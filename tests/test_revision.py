@@ -9,14 +9,12 @@ from alembic.script.revision import Revision
 from alembic.script.revision import RevisionError
 from alembic.script.revision import RevisionMap
 from alembic.testing import assert_raises_message
-from alembic.testing import config
 from alembic.testing import eq_
 from alembic.testing.fixtures import TestBase
 from . import _large_map
 
 
 class APITest(TestBase):
-    @config.requirements.python3
     def test_invalid_datatype(self):
         map_ = RevisionMap(
             lambda: [

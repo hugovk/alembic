@@ -1,5 +1,3 @@
-import sys
-
 from sqlalchemy import Column
 from sqlalchemy import Float
 from sqlalchemy import MetaData
@@ -10,8 +8,6 @@ from alembic.testing import eq_
 from alembic.testing import mock
 from alembic.testing import TestBase
 from ._autogen_fixtures import AutogenFixtureTest
-
-py3k = sys.version_info.major >= 3
 
 
 class AutogenerateCommentsTest(AutogenFixtureTest, TestBase):

@@ -1188,9 +1188,8 @@ class CommandLineTest(TestBase):
 
     def test_version_text(self):
         buf = compat.StringIO()
-        to_mock = "sys.stdout" if util.compat.py3k else "sys.stderr"
 
-        with mock.patch(to_mock, buf):
+        with mock.patch("sys.stdout", buf):
             try:
                 config.CommandLine(prog="test_prog").main(argv=["--version"])
                 assert False

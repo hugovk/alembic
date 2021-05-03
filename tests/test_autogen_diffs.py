@@ -1,5 +1,3 @@
-import sys
-
 from sqlalchemy import BIGINT
 from sqlalchemy import BigInteger
 from sqlalchemy import Boolean
@@ -57,8 +55,6 @@ from ._autogen_fixtures import _default_name_filters
 from ._autogen_fixtures import _default_object_filters
 from ._autogen_fixtures import AutogenFixtureTest
 from ._autogen_fixtures import AutogenTest
-
-py3k = sys.version_info >= (3,)
 
 
 class AutogenCrossSchemaTest(AutogenTest, TestBase):

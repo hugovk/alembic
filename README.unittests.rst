@@ -25,9 +25,9 @@ Advanced Tox Options
 
 For more elaborate CI-style test running, the tox script provided will
 run against various Python / database targets.   For a basic run against
-Python 2.7 using an in-memory SQLite database::
+Python 3.7 using an in-memory SQLite database::
 
-    tox -e py27-sqlite
+    tox -e py37-sqlite
 
 The tox runner contains a series of target combinations that can run
 against various combinations of databases.  The test suite can be
@@ -128,7 +128,7 @@ can run with the tox runner also::
     [db]
     postgresql=postgresql://username:pass@hostname/dbname
 
-Now when we run ``tox -e py27-postgresql``, it will use our custom URL instead
+Now when we run ``tox -e py37-postgresql``, it will use our custom URL instead
 of the fixed one in setup.cfg.
 
 Database Configuration

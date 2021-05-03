@@ -1,5 +1,3 @@
-import sys
-
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import ForeignKeyConstraint
@@ -22,8 +20,6 @@ from alembic.testing import util
 from alembic.testing.env import staging_env
 from alembic.util import sqla_compat
 from ._autogen_fixtures import AutogenFixtureTest
-
-py3k = sys.version_info >= (3,)
 
 
 class NoUqReflection(object):

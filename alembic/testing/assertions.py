@@ -17,7 +17,6 @@ from sqlalchemy.testing.assertions import ne_  # noqa
 from sqlalchemy.util import decorator
 
 from ..util import sqla_compat
-from ..util.compat import py3k
 
 
 def _assert_proper_exception_context(exception):
@@ -29,9 +28,6 @@ def _assert_proper_exception_context(exception):
     these exceptions in a cause chain.
 
     """
-
-    if not util.py3k:
-        return
 
     if (
         exception.__context__ is not exception.__cause__
@@ -119,10 +115,7 @@ def eq_ignore_whitespace(a, b, msg=None):
 
     # convert for unicode string rendering,
     # using special escape character "!U"
-    if py3k:
-        b = re.sub(r"!U", "", b)
-    else:
-        b = re.sub(r"!U", "u", b)
+    b = re.sub(r"!U", "", b)
 
     assert a == b, msg or "%r != %r" % (a, b)
 

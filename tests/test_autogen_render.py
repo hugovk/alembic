@@ -1,5 +1,4 @@
 import re
-import sys
 
 import sqlalchemy as sa  # noqa
 from sqlalchemy import BigInteger
@@ -50,8 +49,6 @@ from alembic.testing import mock
 from alembic.testing import TestBase
 from alembic.testing.fixtures import op_fixture
 from alembic.util import compat
-
-py3k = sys.version_info >= (3,)
 
 
 class AutogenRenderTest(TestBase):

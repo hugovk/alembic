@@ -9,7 +9,6 @@ from .compat import get_current_bytecode_suffixes
 from .compat import has_pep3147
 from .compat import load_module_py
 from .compat import load_module_pyc
-from .compat import py3k
 from .compat import raise_
 from .exc import CommandError
 
@@ -54,14 +53,9 @@ def pyc_file_from_path(path):
     """Given a python source path, locate the .pyc."""
 
     if has_pep3147():
-        if py3k:
-            import importlib
+        import importlib
 
-            candidate = importlib.util.cache_from_source(path)
-        else:
-            import imp
-
-            candidate = imp.cache_from_source(path)
+        candidate = importlib.util.cache_from_source(path)
         if os.path.exists(candidate):
             return candidate
 
