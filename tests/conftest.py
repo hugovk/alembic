@@ -2,7 +2,7 @@
 """
 pytest plugin script.
 
-This script is an extension to py.test which
+This script is an extension to pytest which
 installs SQLAlchemy's testing plugin into the local environment.
 
 """

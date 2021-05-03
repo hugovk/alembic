@@ -541,7 +541,7 @@ Changelog
         :tickets: 668
 
         Fixed an issue that prevented the test suite from running with the
-        recently released py.test 5.4.0.
+        recently released pytest 5.4.0.
 
 
     .. change::
@@ -956,7 +956,7 @@ Changelog
         availability as well as to locate .pyc files, which started  emitting
         deprecation warnings during the test suite.   The warnings were not being
         emitted earlier during the test suite, the change is possibly due to
-        changes in py.test itself but this is not clear. The check for pep3147 is
+        changes in pytest itself but this is not clear. The check for pep3147 is
         set to True for any Python version 3.5 or greater now and importlib is used
         when available.  Note that some dependencies such as distutils may still be
         emitting this warning. Tests are adjusted to accommodate for dependencies
@@ -2333,7 +2333,7 @@ Changelog
     .. change::
       :tags: feature, tests
 
-      The default test runner via "python setup.py test" is now py.test.
+      The default test runner via "python setup.py test" is now pytest.
       nose still works via run_tests.py.
 
     .. change::
