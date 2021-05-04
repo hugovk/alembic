@@ -3,9 +3,6 @@ import importlib.machinery
 import importlib.util
 import inspect
 import io
-import sys
-
-py3k = sys.version_info.major >= 3
 
 
 ArgSpec = collections.namedtuple(
@@ -42,87 +39,78 @@ def inspect_getargspec(func):
     return ArgSpec(args, varargs, varkw, func.__defaults__)
 
 
-if py3k:
-
-    def callable(fn):  # noqa
-        return hasattr(fn, "__call__")
-
-    def u(s):
-        return s
-
-    def ue(s):
-        return s
+def callable(fn):  # noqa
+    return hasattr(fn, "__call__")
 
 
-if py3k:
+def _formatannotation(annotation, base_module=None):
+    """vendored from python 3.7"""
 
-    def _formatannotation(annotation, base_module=None):
-        """vendored from python 3.7"""
+    if getattr(annotation, "__module__", None) == "typing":
+        return repr(annotation).replace("typing.", "")
+    if isinstance(annotation, type):
+        if annotation.__module__ in ("builtins", base_module):
+            return annotation.__qualname__
+        return annotation.__module__ + "." + annotation.__qualname__
+    return repr(annotation)
 
-        if getattr(annotation, "__module__", None) == "typing":
-            return repr(annotation).replace("typing.", "")
-        if isinstance(annotation, type):
-            if annotation.__module__ in ("builtins", base_module):
-                return annotation.__qualname__
-            return annotation.__module__ + "." + annotation.__qualname__
-        return repr(annotation)
 
-    def inspect_formatargspec(
-        args,
-        varargs=None,
-        varkw=None,
-        defaults=None,
-        kwonlyargs=(),
-        kwonlydefaults={},
-        annotations={},
-        formatarg=str,
-        formatvarargs=lambda name: "*" + name,
-        formatvarkw=lambda name: "**" + name,
-        formatvalue=lambda value: "=" + repr(value),
-        formatreturns=lambda text: " -> " + text,
-        formatannotation=_formatannotation,
-    ):
-        """Copy formatargspec from python 3.7 standard library.
+def inspect_formatargspec(
+    args,
+    varargs=None,
+    varkw=None,
+    defaults=None,
+    kwonlyargs=(),
+    kwonlydefaults={},
+    annotations={},
+    formatarg=str,
+    formatvarargs=lambda name: "*" + name,
+    formatvarkw=lambda name: "**" + name,
+    formatvalue=lambda value: "=" + repr(value),
+    formatreturns=lambda text: " -> " + text,
+    formatannotation=_formatannotation,
+):
+    """Copy formatargspec from python 3.7 standard library.
 
-        Python 3 has deprecated formatargspec and requested that Signature
-        be used instead, however this requires a full reimplementation
-        of formatargspec() in terms of creating Parameter objects and such.
-        Instead of introducing all the object-creation overhead and having
-        to reinvent from scratch, just copy their compatibility routine.
+    Python 3 has deprecated formatargspec and requested that Signature
+    be used instead, however this requires a full reimplementation
+    of formatargspec() in terms of creating Parameter objects and such.
+    Instead of introducing all the object-creation overhead and having
+    to reinvent from scratch, just copy their compatibility routine.
 
-        """
+    """
 
-        def formatargandannotation(arg):
-            result = formatarg(arg)
-            if arg in annotations:
-                result += ": " + formatannotation(annotations[arg])
-            return result
-
-        specs = []
-        if defaults:
-            firstdefault = len(args) - len(defaults)
-        for i, arg in enumerate(args):
-            spec = formatargandannotation(arg)
-            if defaults and i >= firstdefault:
-                spec = spec + formatvalue(defaults[i - firstdefault])
-            specs.append(spec)
-        if varargs is not None:
-            specs.append(formatvarargs(formatargandannotation(varargs)))
-        else:
-            if kwonlyargs:
-                specs.append("*")
-        if kwonlyargs:
-            for kwonlyarg in kwonlyargs:
-                spec = formatargandannotation(kwonlyarg)
-                if kwonlydefaults and kwonlyarg in kwonlydefaults:
-                    spec += formatvalue(kwonlydefaults[kwonlyarg])
-                specs.append(spec)
-        if varkw is not None:
-            specs.append(formatvarkw(formatargandannotation(varkw)))
-        result = "(" + ", ".join(specs) + ")"
-        if "return" in annotations:
-            result += formatreturns(formatannotation(annotations["return"]))
+    def formatargandannotation(arg):
+        result = formatarg(arg)
+        if arg in annotations:
+            result += ": " + formatannotation(annotations[arg])
         return result
+
+    specs = []
+    if defaults:
+        firstdefault = len(args) - len(defaults)
+    for i, arg in enumerate(args):
+        spec = formatargandannotation(arg)
+        if defaults and i >= firstdefault:
+            spec = spec + formatvalue(defaults[i - firstdefault])
+        specs.append(spec)
+    if varargs is not None:
+        specs.append(formatvarargs(formatargandannotation(varargs)))
+    else:
+        if kwonlyargs:
+            specs.append("*")
+    if kwonlyargs:
+        for kwonlyarg in kwonlyargs:
+            spec = formatargandannotation(kwonlyarg)
+            if kwonlydefaults and kwonlyarg in kwonlydefaults:
+                spec += formatvalue(kwonlydefaults[kwonlyarg])
+            specs.append(spec)
+    if varkw is not None:
+        specs.append(formatvarkw(formatargandannotation(varkw)))
+    result = "(" + ", ".join(specs) + ")"
+    if "return" in annotations:
+        result += formatreturns(formatannotation(annotations["return"]))
+    return result
 
 
 def load_module_py(module_id, path):

@@ -28,7 +28,6 @@ from alembic.testing.env import write_script
 from alembic.testing.fixtures import capture_context_buffer
 from alembic.testing.fixtures import FutureEngineMixin
 from alembic.testing.fixtures import TestBase
-from alembic.util import compat
 
 
 class PatchEnvironment(object):
@@ -644,7 +643,7 @@ class EncodingTest(TestBase):
             script,
             self.a,
             (
-                compat.u(
+                (
                     """# coding: utf-8
 from __future__ import unicode_literals
 revision = '%s'
@@ -673,7 +672,7 @@ def downgrade():
             bytes_io=True, output_encoding="utf-8"
         ) as buf:
             command.upgrade(self.cfg, self.a, sql=True)
-        assert compat.u("« S’il vous plaît…").encode("utf-8") in buf.getvalue()
+        assert "« S’il vous plaît…".encode("utf-8") in buf.getvalue()
 
 
 class VersionNameTemplateTest(TestBase):

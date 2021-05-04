@@ -12,7 +12,6 @@ from . import util as testing_util
 from .. import util
 from ..script import Script
 from ..script import ScriptDirectory
-from ..util.compat import u
 
 
 def _get_staging_directory():
@@ -338,7 +337,7 @@ def downgrade():
     write_script(
         script,
         b,
-        u(
+        (
             """# coding: utf-8
 "Rev B, méil, %3"
 revision = '{}'

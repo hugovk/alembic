@@ -48,7 +48,6 @@ from alembic.testing import eq_ignore_whitespace
 from alembic.testing import mock
 from alembic.testing import TestBase
 from alembic.testing.fixtures import op_fixture
-from alembic.util import compat
 
 
 class AutogenRenderTest(TestBase):
@@ -812,7 +811,7 @@ class AutogenRenderTest(TestBase):
     def test_render_table_w_unicode_name(self):
         m = MetaData()
         t = Table(
-            compat.ue("\u0411\u0435\u0437"),
+            "\u0411\u0435\u0437",
             m,
             Column("id", Integer, primary_key=True),
         )
@@ -821,7 +820,7 @@ class AutogenRenderTest(TestBase):
             autogenerate.render_op_text(self.autogen_context, op_obj),
             "op.create_table(%r,"
             "sa.Column('id', sa.Integer(), nullable=False),"
-            "sa.PrimaryKeyConstraint('id'))" % compat.ue("\u0411\u0435\u0437"),
+            "sa.PrimaryKeyConstraint('id'))" % "\u0411\u0435\u0437",
         )
 
     def test_render_table_w_unicode_schema(self):
@@ -830,7 +829,7 @@ class AutogenRenderTest(TestBase):
             "test",
             m,
             Column("id", Integer, primary_key=True),
-            schema=compat.ue("\u0411\u0435\u0437"),
+            schema="\u0411\u0435\u0437",
         )
         op_obj = ops.CreateTableOp.from_table(t)
         eq_ignore_whitespace(
@@ -838,7 +837,7 @@ class AutogenRenderTest(TestBase):
             "op.create_table('test',"
             "sa.Column('id', sa.Integer(), nullable=False),"
             "sa.PrimaryKeyConstraint('id'),"
-            "schema=%r)" % compat.ue("\u0411\u0435\u0437"),
+            "schema=%r)" % "\u0411\u0435\u0437",
         )
 
     def test_render_table_w_unsupported_constraint(self):
@@ -1173,7 +1172,7 @@ class AutogenRenderTest(TestBase):
         )
 
     def test_render_unicode_server_default(self):
-        default = compat.ue(
+        default = (
             "\u0411\u0435\u0437 "
             "\u043d\u0430\u0437\u0432\u0430\u043d\u0438\u044f"
         )
@@ -1612,13 +1611,13 @@ class AutogenRenderTest(TestBase):
             "t",
             m,
             Column("c", Integer),
-            schema=compat.ue("\u0411\u0435\u0437"),
+            schema="\u0411\u0435\u0437",
         )
         op_obj = ops.AddConstraintOp.from_constraint(UniqueConstraint(t.c.c))
         eq_ignore_whitespace(
             autogenerate.render_op_text(self.autogen_context, op_obj),
             "op.create_unique_constraint(None, 't', ['c'], "
-            "schema=%r)" % compat.ue("\u0411\u0435\u0437"),
+            "schema=%r)" % "\u0411\u0435\u0437",
         )
 
     def test_render_modify_nullable_w_default(self):
