@@ -5,7 +5,6 @@ import uuid
 import warnings
 
 from .compat import callable
-from .compat import exec_
 from .compat import inspect_getargspec
 from .compat import raise_
 from .compat import with_metaclass
@@ -159,7 +158,7 @@ class ModuleClsProxy(with_metaclass(_ModuleClsMeta)):
             }
         )
         lcl = {}
-        exec_(func_text, globals_, lcl)
+        exec(func_text, globals_, lcl)
         return lcl[name]
 
 
