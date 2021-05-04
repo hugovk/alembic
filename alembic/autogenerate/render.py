@@ -9,7 +9,6 @@ from sqlalchemy import types as sqltypes
 
 from .. import util
 from ..operations import ops
-from ..util import compat
 from ..util import sqla_compat
 
 MAX_PYTHON_ARGS = 255
@@ -484,7 +483,7 @@ def _ident(name):
     if name is None:
         return name
     elif isinstance(name, sql.elements.quoted_name):
-        return compat.text_type(name)
+        return str(name)
     elif isinstance(name, str):
         return name
 

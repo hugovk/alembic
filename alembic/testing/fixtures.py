@@ -23,7 +23,6 @@ from ..migration import MigrationContext
 from ..operations import Operations
 from ..util import sqla_compat
 from ..util.compat import configparser
-from ..util.compat import text_type
 from ..util.sqla_compat import create_mock_engine
 from ..util.sqla_compat import sqla_14
 
@@ -199,7 +198,7 @@ def op_fixture(
             if isinstance(stmt, str):
                 stmt = text(stmt)
             assert stmt.supports_execution
-            sql = text_type(stmt.compile(dialect=ctx_dialect))
+            sql = str(stmt.compile(dialect=ctx_dialect))
 
             buf.write(sql)
 
