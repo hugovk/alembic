@@ -17,8 +17,6 @@ from sqlalchemy.sql.expression import _BindParamClause
 from sqlalchemy.sql.expression import _TextClause as TextClause
 from sqlalchemy.sql.visitors import traverse
 
-from . import compat
-
 
 def _safe_int(value):
     try:
@@ -247,7 +245,7 @@ def _remove_column_from_collection(collection, column):
 
 def _textual_index_column(table, text_):
     """a workaround for the Index construct's severe lack of flexibility"""
-    if isinstance(text_, compat.string_types):
+    if isinstance(text_, str):
         c = Column(text_, sqltypes.NULLTYPE)
         table.append_column(c)
         return c

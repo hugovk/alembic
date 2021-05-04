@@ -29,7 +29,6 @@ from ..operations import ops
 from ..operations import schemaobj
 from ..operations.base import BatchOperations
 from ..operations.base import Operations
-from ..util import compat
 from ..util import sqla_compat
 
 
@@ -80,9 +79,7 @@ class PostgresqlImpl(DefaultImpl):
         if (
             not isinstance(inspector_column.type, Numeric)
             and metadata_column.server_default is not None
-            and isinstance(
-                metadata_column.server_default.arg, compat.string_types
-            )
+            and isinstance(metadata_column.server_default.arg, str)
             and not re.match(r"^'.*'$", rendered_metadata_default)
         ):
             rendered_metadata_default = "'%s'" % rendered_metadata_default

@@ -11,7 +11,6 @@ from .. import util
 from ..operations import ops
 from ..util import compat
 from ..util import sqla_compat
-from ..util.compat import string_types
 
 MAX_PYTHON_ARGS = 255
 
@@ -486,7 +485,7 @@ def _ident(name):
         return name
     elif isinstance(name, sql.elements.quoted_name):
         return compat.text_type(name)
-    elif isinstance(name, compat.string_types):
+    elif isinstance(name, str):
         return name
 
 
@@ -656,14 +655,14 @@ def _render_server_default(default, autogen_context, repr_=True):
     elif sqla_compat._server_default_is_identity(default):
         return _render_identity(default, autogen_context)
     elif isinstance(default, sa_schema.DefaultClause):
-        if isinstance(default.arg, compat.string_types):
+        if isinstance(default.arg, str):
             default = default.arg
         else:
             return _render_potential_expr(
                 default.arg, autogen_context, is_server_default=True
             )
 
-    if isinstance(default, string_types) and repr_:
+    if isinstance(default, str) and repr_:
         default = repr(re.sub(r"^'|'$", "", default))
 
     return default
@@ -949,7 +948,7 @@ def _render_check_constraint(constraint, autogen_context, namespace_metadata):
 
 @renderers.dispatch_for(ops.ExecuteSQLOp)
 def _execute_sql(autogen_context, op):
-    if not isinstance(op.sqltext, string_types):
+    if not isinstance(op.sqltext, str):
         raise NotImplementedError(
             "Autogenerate rendering of SQL Expression language constructs "
             "not supported here; please use a plain SQL string"

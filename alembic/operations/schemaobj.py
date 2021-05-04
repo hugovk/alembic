@@ -8,7 +8,6 @@ from sqlalchemy.types import NULLTYPE
 from .. import util
 from ..util import sqla_compat
 from ..util.compat import raise_
-from ..util.compat import string_types
 
 
 class SchemaObjects(object):
@@ -198,7 +197,7 @@ class SchemaObjects(object):
         ForeignKey.
 
         """
-        if isinstance(fk._colspec, string_types):
+        if isinstance(fk._colspec, str):
             table_key, cname = fk._colspec.rsplit(".", 1)
             sname, tname = self._parse_table_key(table_key)
             if table_key not in metadata.tables:

@@ -8,7 +8,6 @@ from sqlalchemy import text
 from . import base
 from .. import util
 from ..util import sqla_compat
-from ..util.compat import string_types
 from ..util.compat import text_type
 from ..util.compat import with_metaclass
 
@@ -114,7 +113,7 @@ class DefaultImpl(with_metaclass(ImplMeta)):
         multiparams=(),
         params=util.immutabledict(),
     ):
-        if isinstance(construct, string_types):
+        if isinstance(construct, str):
             construct = text(construct)
         if self.as_sql:
             if multiparams or params:

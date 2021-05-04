@@ -4,7 +4,6 @@ import io
 import sys
 
 py3k = sys.version_info.major >= 3
-py36 = sys.version_info >= (3, 6)
 
 
 ArgSpec = collections.namedtuple(
@@ -44,7 +43,6 @@ def inspect_getargspec(func):
 if py3k:
     import builtins as compat_builtins
 
-    string_types = (str,)
     binary_type = bytes
     text_type = str
 

@@ -8,7 +8,6 @@ from .compat import callable
 from .compat import exec_
 from .compat import inspect_getargspec
 from .compat import raise_
-from .compat import string_types
 from .compat import with_metaclass
 
 
@@ -183,7 +182,7 @@ def rev_id():
 def to_list(x, default=None):
     if x is None:
         return default
-    elif isinstance(x, string_types):
+    elif isinstance(x, str):
         return [x]
     elif isinstance(x, collections.abc.Iterable):
         return list(x)
@@ -194,7 +193,7 @@ def to_list(x, default=None):
 def to_tuple(x, default=None):
     if x is None:
         return default
-    elif isinstance(x, string_types):
+    elif isinstance(x, str):
         return (x,)
     elif isinstance(x, collections.abc.Iterable):
         return tuple(x)
@@ -284,7 +283,7 @@ class Dispatcher(object):
 
     def dispatch(self, obj, qualifier="default"):
 
-        if isinstance(obj, string_types):
+        if isinstance(obj, str):
             targets = [obj]
         elif isinstance(obj, type):
             targets = obj.__mro__

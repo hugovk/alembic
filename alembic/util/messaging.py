@@ -8,7 +8,6 @@ from sqlalchemy.engine import url
 
 from . import sqla_compat
 from .compat import binary_type
-from .compat import string_types
 
 log = logging.getLogger(__name__)
 
@@ -95,7 +94,7 @@ def msg(msg, newline=True, flush=False):
 def format_as_comma(value):
     if value is None:
         return ""
-    elif isinstance(value, string_types):
+    elif isinstance(value, str):
         return value
     elif isinstance(value, collections.abc.Iterable):
         return ", ".join(value)
