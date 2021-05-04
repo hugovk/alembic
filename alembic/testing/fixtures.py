@@ -21,7 +21,6 @@ from .assertions import _get_dialect
 from ..environment import EnvironmentContext
 from ..migration import MigrationContext
 from ..operations import Operations
-from ..util import compat
 from ..util import sqla_compat
 from ..util.compat import configparser
 from ..util.compat import string_types
@@ -105,7 +104,7 @@ def capture_engine_context_buffer(**kw):
     from .env import _sqlite_file_db
     from sqlalchemy import event
 
-    buf = compat.StringIO()
+    buf = io.StringIO()
 
     eng = _sqlite_file_db()
 

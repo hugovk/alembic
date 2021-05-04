@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from io import StringIO
 import re
 
 from mako.pygen import PythonPrinter
@@ -11,8 +12,6 @@ from ..operations import ops
 from ..util import compat
 from ..util import sqla_compat
 from ..util.compat import string_types
-from ..util.compat import StringIO
-
 
 MAX_PYTHON_ARGS = 255
 

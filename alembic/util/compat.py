@@ -43,12 +43,6 @@ def inspect_getargspec(func):
 
 
 if py3k:
-    from io import StringIO
-else:
-    # accepts strings
-    from StringIO import StringIO  # noqa
-
-if py3k:
     import builtins as compat_builtins
 
     string_types = (str,)

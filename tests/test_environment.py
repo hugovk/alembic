@@ -1,4 +1,5 @@
 #!coding: utf-8
+from io import StringIO
 import os
 import sys
 
@@ -25,7 +26,6 @@ from alembic.testing.env import staging_env
 from alembic.testing.env import write_script
 from alembic.testing.fixtures import capture_context_buffer
 from alembic.testing.fixtures import TestBase
-from alembic.util import compat
 
 
 class EnvironmentTest(TestBase):
@@ -202,7 +202,7 @@ class MigrationTransactionTest(TestBase):
             )
             self.context.output_buffer = (
                 self.context.impl.output_buffer
-            ) = compat.StringIO()
+            ) = StringIO()
         else:
             self.context = MigrationContext.configure(
                 connection=conn, opts=opts
@@ -487,7 +487,7 @@ class MigrationTransactionTest(TestBase):
     def _assert_impl_steps(self, *steps):
         to_check = self.context.output_buffer.getvalue()
 
-        self.context.impl.output_buffer = buf = compat.StringIO()
+        self.context.impl.output_buffer = buf = StringIO()
         for step in steps:
             if step == "BEGIN":
                 self.context.impl.emit_begin()

@@ -1,6 +1,7 @@
 from contextlib import contextmanager
 import inspect
 from io import BytesIO
+from io import StringIO
 from io import TextIOWrapper
 import os
 import re
@@ -34,7 +35,6 @@ from alembic.testing.env import write_script
 from alembic.testing.fixtures import capture_context_buffer
 from alembic.testing.fixtures import capture_engine_context_buffer
 from alembic.testing.fixtures import TestBase
-from alembic.util import compat
 from alembic.util.sqla_compat import _connectable_has_table
 
 
@@ -1187,7 +1187,7 @@ class CommandLineTest(TestBase):
             )
 
     def test_version_text(self):
-        buf = compat.StringIO()
+        buf = StringIO()
 
         with mock.patch("sys.stdout", buf):
             try:
