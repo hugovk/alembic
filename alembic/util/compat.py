@@ -3,7 +3,6 @@ import inspect
 import io
 import sys
 
-py2k = sys.version_info.major < 3
 py3k = sys.version_info.major >= 3
 py36 = sys.version_info >= (3, 6)
 
@@ -59,21 +58,6 @@ if py3k:
         return s
 
     range = range  # noqa
-else:
-    import __builtin__ as compat_builtins
-
-    string_types = (basestring,)  # noqa
-    binary_type = str
-    text_type = unicode  # noqa
-    callable = callable  # noqa
-
-    def u(s):
-        return unicode(s, "utf-8")  # noqa
-
-    def ue(s):
-        return unicode(s, "unicode_escape")  # noqa
-
-    range = xrange  # noqa
 
 if py3k:
 
@@ -146,19 +130,9 @@ if py3k:
         return result
 
 
-else:
-    from inspect import formatargspec as inspect_formatargspec  # noqa
-
-
 if py3k:
-    from configparser import ConfigParser as SafeConfigParser
-    import configparser
-else:
-    from ConfigParser import SafeConfigParser  # noqa
-    import ConfigParser as configparser  # noqa
-
-if py2k:
-    from mako.util import parse_encoding
+    from configparser import ConfigParser as SafeConfigParser  # noqa
+    import configparser  # noqa
 
 if py3k:
     import importlib.machinery
@@ -204,10 +178,6 @@ else:
     def load_module_py(module_id, path):  # noqa
         with open(path, "rb") as fp:
             mod = imp.load_source(module_id, path, fp)
-            if py2k:
-                source_encoding = parse_encoding(fp)
-                if source_encoding:
-                    mod._alembic_source_encoding = source_encoding
             del sys.modules[module_id]
             return mod
 
@@ -288,60 +258,9 @@ if py3k:
             del exception, replace_context, from_, with_traceback
 
 
-else:
-    exec(
-        "def raise_(exception, with_traceback=None, replace_context=None, "
-        "from_=False):\n"
-        "    if with_traceback:\n"
-        "        raise type(exception), exception, with_traceback\n"
-        "    else:\n"
-        "        raise exception\n"
-    )
-
-
 # produce a wrapper that allows encoded text to stream
 # into a given buffer, but doesn't close it.
 # not sure of a more idiomatic approach to this.
 class EncodedIO(io.TextIOWrapper):
     def close(self):
         pass
-
-
-if py2k:
-    # in Py2K, the io.* package is awkward because it does not
-    # easily wrap the file type (e.g. sys.stdout) and I can't
-    # figure out at all how to wrap StringIO.StringIO
-    # and also might be user specified too.  So create a full
-    # adapter.
-
-    class ActLikePy3kIO(object):
-
-        """Produce an object capable of wrapping either
-        sys.stdout (e.g. file) *or* StringIO.StringIO().
-
-        """
-
-        def _false(self):
-            return False
-
-        def _true(self):
-            return True
-
-        readable = seekable = _false
-        writable = _true
-        closed = False
-
-        def __init__(self, file_):
-            self.file_ = file_
-
-        def write(self, text):
-            return self.file_.write(text)
-
-        def flush(self):
-            return self.file_.flush()
-
-    class EncodedIO(EncodedIO):
-        def __init__(self, file_, encoding):
-            super(EncodedIO, self).__init__(
-                ActLikePy3kIO(file_), encoding=encoding
-            )

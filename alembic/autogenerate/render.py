@@ -485,17 +485,7 @@ def _ident(name):
     if name is None:
         return name
     elif isinstance(name, sql.elements.quoted_name):
-        if compat.py2k:
-            # the attempt to encode to ascii here isn't super ideal,
-            # however we are trying to cut down on an explosion of
-            # u'' literals only when py2k + SQLA 0.9, in particular
-            # makes unit tests testing code generation very difficult
-            try:
-                return name.encode("ascii")
-            except UnicodeError:
-                return compat.text_type(name)
-        else:
-            return compat.text_type(name)
+        return compat.text_type(name)
     elif isinstance(name, compat.string_types):
         return name
 
