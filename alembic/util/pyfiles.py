@@ -5,8 +5,6 @@ import tempfile
 from mako import exceptions
 from mako.template import Template
 
-from .compat import get_current_bytecode_suffixes
-from .compat import has_pep3147
 from .compat import load_module_py
 from .compat import load_module_pyc
 from .compat import raise_
@@ -51,18 +49,16 @@ def coerce_resource_to_filename(fname):
 
 def pyc_file_from_path(path):
     """Given a python source path, locate the .pyc."""
+    import importlib
 
-    if has_pep3147():
-        import importlib
+    candidate = importlib.util.cache_from_source(path)
+    if os.path.exists(candidate):
+        return candidate
 
-        candidate = importlib.util.cache_from_source(path)
-        if os.path.exists(candidate):
-            return candidate
-
-    # even for pep3147, fall back to the old way of finding .pyc files,
+    # Fall back to the old way of finding .pyc files,
     # to support sourceless operation
     filepath, ext = os.path.splitext(path)
-    for ext in get_current_bytecode_suffixes():
+    for ext in importlib.machinery.BYTECODE_SUFFIXES:
         if os.path.exists(filepath + ext):
             return filepath + ext
     else:

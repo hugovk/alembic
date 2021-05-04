@@ -1,4 +1,6 @@
 import collections
+import importlib.machinery
+import importlib.util
 import inspect
 import io
 import sys
@@ -124,68 +126,22 @@ if py3k:
         return result
 
 
-if py3k:
-    import importlib.machinery
-
-    import importlib.util
-
-    def load_module_py(module_id, path):
-        spec = importlib.util.spec_from_file_location(module_id, path)
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        return module
-
-    def load_module_pyc(module_id, path):
-        spec = importlib.util.spec_from_file_location(module_id, path)
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        return module
-
-    def get_bytecode_suffixes():
-        try:
-            return importlib.machinery.BYTECODE_SUFFIXES
-        except AttributeError:
-            return importlib.machinery.DEBUG_BYTECODE_SUFFIXES
-
-    def get_current_bytecode_suffixes():
-        if py3k:
-            suffixes = importlib.machinery.BYTECODE_SUFFIXES
-        else:
-            if sys.flags.optimize:
-                suffixes = importlib.machinery.OPTIMIZED_BYTECODE_SUFFIXES
-            else:
-                suffixes = importlib.machinery.BYTECODE_SUFFIXES
-
-        return suffixes
-
-    def has_pep3147():
-        return True
+def load_module_py(module_id, path):
+    spec = importlib.util.spec_from_file_location(module_id, path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
-else:
-    import imp
+def load_module_pyc(module_id, path):
+    spec = importlib.util.spec_from_file_location(module_id, path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
-    def load_module_py(module_id, path):  # noqa
-        with open(path, "rb") as fp:
-            mod = imp.load_source(module_id, path, fp)
-            del sys.modules[module_id]
-            return mod
 
-    def load_module_pyc(module_id, path):  # noqa
-        with open(path, "rb") as fp:
-            mod = imp.load_compiled(module_id, path, fp)
-            # no source encoding here
-            del sys.modules[module_id]
-            return mod
-
-    def get_current_bytecode_suffixes():
-        if sys.flags.optimize:
-            return [".pyo"]  # e.g. .pyo
-        else:
-            return [".pyc"]  # e.g. .pyc
-
-    def has_pep3147():
-        return False
+def has_pep3147():
+    return True
 
 
 try:

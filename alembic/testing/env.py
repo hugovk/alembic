@@ -1,5 +1,6 @@
 #!coding: utf-8
 
+import importlib.machinery
 import os
 import shutil
 import textwrap
@@ -11,8 +12,6 @@ from . import util as testing_util
 from .. import util
 from ..script import Script
 from ..script import ScriptDirectory
-from ..util.compat import get_current_bytecode_suffixes
-from ..util.compat import has_pep3147
 from ..util.compat import u
 
 
@@ -290,15 +289,13 @@ def make_sourceless(path, style):
 
     py_compile.compile(path)
 
-    if style == "simple" and has_pep3147():
+    if style == "simple":
         pyc_path = util.pyc_file_from_path(path)
-        suffix = get_current_bytecode_suffixes()[0]
+        suffix = importlib.machinery.BYTECODE_SUFFIXES[0]
         filepath, ext = os.path.splitext(path)
         simple_pyc_path = filepath + suffix
         shutil.move(pyc_path, simple_pyc_path)
         pyc_path = simple_pyc_path
-    elif style == "pep3147" and not has_pep3147():
-        raise NotImplementedError()
     else:
         assert style in ("pep3147", "simple")
         pyc_path = util.pyc_file_from_path(path)
