@@ -43,7 +43,6 @@ def inspect_getargspec(func):
 if py3k:
     import builtins as compat_builtins
 
-    binary_type = bytes
     text_type = str
 
     def callable(fn):  # noqa

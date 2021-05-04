@@ -7,7 +7,6 @@ import warnings
 from sqlalchemy.engine import url
 
 from . import sqla_compat
-from .compat import binary_type
 
 log = logging.getLogger(__name__)
 
@@ -31,7 +30,7 @@ except (ImportError, IOError):
 def write_outstream(stream, *text):
     encoding = getattr(stream, "encoding", "ascii") or "ascii"
     for t in text:
-        if not isinstance(t, binary_type):
+        if not isinstance(t, bytes):
             t = t.encode(encoding, "replace")
         t = t.decode(encoding)
         try:
