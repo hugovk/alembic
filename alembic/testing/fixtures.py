@@ -1,4 +1,5 @@
 # coding: utf-8
+import configparser
 from contextlib import contextmanager
 import io
 import re
@@ -22,7 +23,6 @@ from ..environment import EnvironmentContext
 from ..migration import MigrationContext
 from ..operations import Operations
 from ..util import sqla_compat
-from ..util.compat import configparser
 from ..util.sqla_compat import create_mock_engine
 from ..util.sqla_compat import sqla_14
 

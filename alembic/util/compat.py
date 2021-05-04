@@ -52,7 +52,6 @@ if py3k:
     def ue(s):
         return s
 
-    range = range  # noqa
 
 if py3k:
 
@@ -124,10 +123,6 @@ if py3k:
             result += formatreturns(formatannotation(annotations["return"]))
         return result
 
-
-if py3k:
-    from configparser import ConfigParser as SafeConfigParser  # noqa
-    import configparser  # noqa
 
 if py3k:
     import importlib.machinery
