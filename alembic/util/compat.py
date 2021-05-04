@@ -27,7 +27,7 @@ def inspect_getargspec(func):
 
     nargs = co.co_argcount
     names = co.co_varnames
-    nkwargs = co.co_kwonlyargcount if py3k else 0
+    nkwargs = co.co_kwonlyargcount
     args = list(names[:nargs])
 
     nargs += nkwargs
@@ -80,11 +80,6 @@ else:
         return unicode(s, "unicode_escape")  # noqa
 
     range = xrange  # noqa
-
-if py3k:
-    import collections.abc as collections_abc
-else:
-    import collections as collections_abc  # noqa
 
 if py3k:
 

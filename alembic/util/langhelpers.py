@@ -1,10 +1,10 @@
 import collections
+import collections.abc
 import textwrap
 import uuid
 import warnings
 
 from .compat import callable
-from .compat import collections_abc
 from .compat import exec_
 from .compat import inspect_getargspec
 from .compat import raise_
@@ -185,7 +185,7 @@ def to_list(x, default=None):
         return default
     elif isinstance(x, string_types):
         return [x]
-    elif isinstance(x, collections_abc.Iterable):
+    elif isinstance(x, collections.abc.Iterable):
         return list(x)
     else:
         return [x]
@@ -196,7 +196,7 @@ def to_tuple(x, default=None):
         return default
     elif isinstance(x, string_types):
         return (x,)
-    elif isinstance(x, collections_abc.Iterable):
+    elif isinstance(x, collections.abc.Iterable):
         return tuple(x)
     else:
         return (x,)
